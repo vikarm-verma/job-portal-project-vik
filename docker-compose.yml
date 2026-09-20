@@ -6,8 +6,8 @@ services:
     environment:
       MYSQL_DATABASE: ${DB_NAME:-jobportal_db}
       MYSQL_USER: ${DB_USERNAME:-jobportal}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-jobportal123}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-dev-only-root-password}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -36,8 +36,8 @@ services:
       DB_PORT: 3306
       DB_NAME: ${DB_NAME:-jobportal_db}
       DB_USERNAME: ${DB_USERNAME:-jobportal}
-      DB_PASSWORD: ${DB_PASSWORD:-jobportal123}
-      JWT_SECRET: ${JWT_SECRET:-dev-only-job-portal-jwt-secret-change-this-value-1234567890}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       SERVER_PORT: 8080
       SPRING_PROFILES_ACTIVE: development

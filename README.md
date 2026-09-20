@@ -24,14 +24,13 @@ The backend connects to MySQL using the following environment variables:
 | `DB_PORT` | `3306` | MySQL port |
 | `DB_NAME` | `jobportal_db` | Database name |
 | `DB_USERNAME` | `jobportal` | Application database user |
-| `DB_PASSWORD` | `jobportal123` | Application database password |
-| `JWT_SECRET` | Development-only fallback | JWT signing secret; use a strong secret outside development |
-| `MYSQL_ROOT_PASSWORD` | Development-only fallback | Root password used only by Docker MySQL |
+| `DB_PASSWORD` | Required | Application database password |
+| `JWT_SECRET` | Required | JWT signing secret; use a strong secret |
+| `MYSQL_ROOT_PASSWORD` | Required | Root password used only by Docker MySQL |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173,http://127.0.0.1:5173` | Allowed frontend origins |
 
-The local defaults are intended for development only. Set `DB_PASSWORD`, `JWT_SECRET`, and
-`MYSQL_ROOT_PASSWORD` through the environment or a local, untracked `.env` file for any shared
-or production-like environment. Never commit production credentials.
+Set `DB_PASSWORD`, `JWT_SECRET`, and `MYSQL_ROOT_PASSWORD` through the environment or a local,
+untracked `.env` file before starting Docker. Never commit production credentials.
 
 ### Start MySQL
 
@@ -49,9 +48,8 @@ select the target database first.
 
 ### Start the backend
 
-With the default local Docker credentials, the backend can use `application.properties` as-is.
-To override configuration, set the environment variables before starting Spring Boot. For
-example, the application connects using:
+Set the required secret environment variables before starting Docker or Spring Boot. The
+application connects using:
 
 ```text
 jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
