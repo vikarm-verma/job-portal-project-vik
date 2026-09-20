@@ -1,0 +1,20 @@
+import React, { useEffect, useState } from 'react';
+import { profileApi } from '../api/profileApi';
+import { useAuth } from '../auth/AuthContext';
+import { friendlyError } from '../utils/errors';
+
+export default function ProfilePage() {
+  const { role } = useAuth();
+  const [profile, setProfile] = useState({});
+  const [resume, setResume] = useState(null);
+  const [state, setState] = useState({ loading: true, saving: false, uploading: false, error: '', success: '' });
+  useEffect(() => { Promise.all([profileApi.get(), role === 'JOB_SEEKER' ? profileApi.getResume().catch(() => null) : Promise.resolve(null)]).then(([data, resumeData]) => { setProfile(data || {}); setResume(resumeData); }).catch((error) => setState((s) => ({ ...s, error: friendlyError(error) }))).finally(() => setState((s) => ({ ...s, loading: false }))); }, [role]);
+  const update = (key, value) => setProfile({ ...profile, [key]: value });
+  const save = async (event) => { event.preventDefault(); setState({ ...state, saving: true, error: '', success: '' }); try { setProfile(await profileApi.update(profile)); setState({ ...state, saving: false, success: 'Profile saved.' }); } catch (error) { setState({ ...state, saving: false, error: friendlyError(error) }); } };
+  const upload = async (event) => { const file = event.target.files?.[0]; if (!file) return; setState({ ...state, uploading: true, error: '', success: '' }); try { setResume(await profileApi.uploadResume(file)); setState({ ...state, uploading: false, success: 'Resume uploaded.' }); } catch (error) { setState({ ...state, uploading: false, error: friendlyError(error) }); } };
+  if (state.loading) return <div className="loading-state">Loading profile...</div>;
+  const seeker = role === 'JOB_SEEKER';
+  return <section className="narrow-page"><div className="page-heading"><p className="eyebrow">Your details</p><h1>{seeker ? 'Job seeker profile' : 'Company profile'}</h1><p>Keep the information teams use to understand your fit.</p></div><form className="panel stack-form" onSubmit={save}>{seeker ? <><Field label="Phone" value={profile.phone} onChange={(v) => update('phone', v)} required /><div className="form-grid"><Field label="City" value={profile.city || ''} onChange={(v) => update('city', v)} /><Field label="Experience level" value={profile.experienceLevel || ''} onChange={(v) => update('experienceLevel', v)} /></div><Field label="Skills" value={profile.skills || ''} onChange={(v) => update('skills', v)} /><label className="field"><span>Summary</span><textarea rows="6" value={profile.summary || ''} onChange={(e) => update('summary', e.target.value)} /></label></> : <><Field label="Company name" value={profile.companyName || ''} onChange={(v) => update('companyName', v)} required /><div className="form-grid"><Field label="Website" value={profile.companyWebsite || ''} onChange={(v) => update('companyWebsite', v)} /><Field label="Location" value={profile.location || ''} onChange={(v) => update('location', v)} /></div><label className="field"><span>Company description</span><textarea rows="6" value={profile.companyDescription || ''} onChange={(e) => update('companyDescription', e.target.value)} /></label></>}<button className="button button-primary" disabled={state.saving}>{state.saving ? 'Saving...' : 'Save profile'}</button>{state.success && <p className="success-message">{state.success}</p>}{state.error && <p className="form-error">{state.error}</p>}</form>{seeker && <div className="panel resume-panel"><div><p className="eyebrow">Resume</p><h2>{resume?.fileName || 'No resume uploaded'}</h2>{resume && <p className="muted">{resume.contentType}</p>}</div><label className="button button-ghost">{state.uploading ? 'Uploading...' : 'Upload resume'}<input type="file" hidden accept=".pdf,.doc,.docx" onChange={upload} disabled={state.uploading} /></label></div>}</section>;
+}
+
+function Field({ label, value, onChange, ...props }) { return <label className="field"><span>{label}</span><input value={value || ''} onChange={(e) => onChange(e.target.value)} {...props} /></label>; }

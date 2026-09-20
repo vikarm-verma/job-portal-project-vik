@@ -1,0 +1,11 @@
+target
+.git
+.gitignore
+node_modules
+.idea
+.vscode
+*.iml
+*.log
+logs
+frontend/dist
+frontend/build

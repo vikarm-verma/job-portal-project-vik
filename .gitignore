@@ -1,0 +1,94 @@
+# ==============================
+# IDE / Editor
+# ==============================
+
+.vscode/
+.idea/
+*.iml
+
+# ==============================
+# Operating System
+# ==============================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Java / Maven / Spring Boot
+# ==============================
+
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven generated files
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+
+# ==============================
+# Logs
+# ==============================
+
+*.log
+logs/
+
+# ==============================
+# Node / React
+# ==============================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# React / Vite build output
+dist/
+build/
+
+# ==============================
+# Coverage
+# ==============================
+
+coverage/
+.nyc_output/
+
+# ==============================
+# Docker
+# ==============================
+
+docker-compose.override.yml
+
+# ==============================
+# Temporary files
+# ==============================
+
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ==============================
+# Local database / data files
+# ==============================
+
+*.sql.bak
+*.sqlite
+*.db
+
+# MySQL local data directories
+mysql-data/
